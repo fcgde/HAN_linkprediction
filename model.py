@@ -35,7 +35,7 @@ class NodeAttentionPerMetaPath(nn.Module):
         scores = self.leakyReLU(e_1 + e_2.T)
 
         scores = F.dropout(scores, self.dropout, training=self.training)
-        mask = mask.to(device=torch.device("cuda"))
+        mask = mask.to(device=torch.device("cpu"))
         masked_scores = scores.masked_fill_(mask == 0, -1e15)
 
         attention = F.softmax(masked_scores, dim=1)
@@ -143,7 +143,7 @@ class SemanticAttention(nn.Module):
         beta = F.softmax(w_meta, dim=-1)
         # 计算softmax之后的结果
 
-        Z = torch.zeros(size=node_attentions[0].shape).to(torch.device("cuda"))
+        Z = torch.zeros(size=node_attentions[0].shape).to(torch.device("cpu"))
 
         for i, weight in enumerate(beta):
             if(i == self.link_prediction_layer):

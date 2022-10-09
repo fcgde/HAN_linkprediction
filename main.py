@@ -25,7 +25,8 @@ if __name__ == "__main__":
     print("num_nodes:{:d}".format(num_nodes))
     print("dim_features:{:d}".format(dim_feature))
     model = HAN(input_features=dim_feature, n_hid=64,head_number=4,  meta_path_number=2, aloha = 0.6, link_prediction_layer=1)
-    device = torch.device("cuda")
+    ##device = torch.device("cuda")
+    device = torch.device("cpu")
     model = model.to(device)
     features = features.to(device)
 

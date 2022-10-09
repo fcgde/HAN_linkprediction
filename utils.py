@@ -6,7 +6,7 @@ import pandas as pd
 id_layer = 'PAP'   # 要预测第几层
 
 def load_data():
-    data = scio.loadmat("../data/ACM3025.mat")
+    data = scio.loadmat("./data/ACM3025.mat")
 
     adjs = {
         "PLP": torch.Tensor(data["PLP"]),
@@ -73,7 +73,7 @@ def load_data():
     return features, adjs, break_adj, metapaths, train_idx,test_idx, train_label, test_label
 
 def process_load_data():
-    data = scio.loadmat("../data/ACM3025.mat")
+    data = scio.loadmat("./data/ACM3025.mat")
 
     adjs = {
         "PLP": torch.Tensor(data["PLP"]),
