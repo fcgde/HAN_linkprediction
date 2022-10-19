@@ -1,17 +1,19 @@
 import torch
 import torch.nn as nn
-from model import NodeAttention, SemanticAttention
+from model import NodeAttention, SemanticAttention, LayerNodeAttention
 import torch.nn.functional as F
 
 class HAN(nn.Module):
 
-    def __init__(self, input_features, n_hid, head_number, meta_path_number, dropout=0.5, alpha=0.5, aloha = 0.5, link_prediction_layer = 0):
+    def __init__(self, num_nodes, input_features, n_hid, head_number, meta_path_number, dropout=0.3, alpha=0.5, aloha = 0.5, link_prediction_layer = 0):
         super(HAN, self).__init__()
 
         #此处的参数传给__init__（）
-        self.node_attention = NodeAttention(input_features, n_hid, head_number, dropout, alpha, meta_path_number)
+        self.node_attention = NodeAttention(input_features, n_hid, head_number, dropout, alpha, meta_path_number, num_nodes)
 
         self.semantic_attention = SemanticAttention(n_hid, n_hid, aloha, link_prediction_layer)
+
+        self.layer_node_attention = LayerNodeAttention(n_hid,n_hid, head_number, dropout, alpha, meta_path_number, num_nodes)
 
         self.dropout = dropout
 
@@ -24,11 +26,18 @@ class HAN(nn.Module):
         Z = self.node_attention(features, adjs) #此处的features, adjs传给forward
 
         Z = F.dropout(Z, self.dropout, training=self.training)
+        #以上Z为三维矩阵Tensor(2,3025,64)
 
-        Z = self.semantic_attention(Z) #传给forward的参数：特征矩阵
+        # 层间节点特征矩阵计算start
+        # Y = self.layer_node_attention(Z)
+        # print(Y.shape)
+        # print(Y)  # Y输出为（3025，2，64） 需要调整为（2，3025，64）
+        # end
+
+        Z = self.semantic_attention(Z) #传给forward的参数：特征矩阵     Z为三维矩阵Tensor(2,3025,64)
         # 语义级注意力处理后的 Z矩阵[node_number, features_number]
 
-        Z = F.dropout(Z, self.dropout, training=self.training)
+        Z = F.dropout(Z, self.dropout, training=self.training) #Z为三维矩阵Tensor(3025,64)
 
         score = self.distmult(Z) # 此处的Z参数传给forward（） Z矩阵[node_number,features_number]
 
