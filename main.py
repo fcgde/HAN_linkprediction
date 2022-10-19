@@ -9,9 +9,12 @@ from model import *
 from sample import *
 from torch.utils.tensorboard import SummaryWriter
 
+
+
+
 # 添加tensorboard
-# writer = SummaryWriter("./logs2/dir2")
-# writer = SummaryWriter("./logs2/dir5")
+writer = SummaryWriter("./logs2/dir2")
+writer = SummaryWriter("./logs2/dir5")
 
 
 if __name__ == "__main__":
@@ -24,14 +27,14 @@ if __name__ == "__main__":
     dim_feature = features.shape[1]#节点的特征值个数
     print("num_nodes:{:d}".format(num_nodes))
     print("dim_features:{:d}".format(dim_feature))
-    model = HAN(input_features=dim_feature, n_hid=64,head_number=4,  meta_path_number=2, aloha = 0.6, link_prediction_layer=1)
+    model = HAN(num_nodes, input_features=dim_feature, n_hid=64, head_number=4, meta_path_number=2, aloha = 1, link_prediction_layer=1)
     ##device = torch.device("cuda")
     device = torch.device("cpu")
     model = model.to(device)
     features = features.to(device)
 
-    lr = 0.01
-    optimizer = torch.optim.Adam(params=model.parameters(), lr=lr, betas=(0.9, 0.99), weight_decay=0)
+    lr = 0.03
+    optimizer = torch.optim.Adam(params=model.parameters(), lr=lr, betas=(0.9, 0.99), weight_decay=0)#优化器 优化器具有很多选择，如RMSprop， Adam, SGD, Adadelta等
     # torch.optim.Adam()
     # params(iterable) – 待优化参数的iterable或者是定义了参数组的dict
     # lr(float, 可选) – 学习率（默认：1e-3）
@@ -39,7 +42,7 @@ if __name__ == "__main__":
     # eps(float, 可选) – 为了增加数值计算的稳定性而加到分母里的项（默认：1e-8）
     # weight_decay(float, 可选) – 权重衰减（L2惩罚）（默认: 0）
 
-    total_epochs = 500  #epochs指的就是训练过程中全部样本数据将被“轮”多少次
+    total_epochs = 5  #epochs指的就是训练过程中全部样本数据将被“轮”多少次
 
     lam = 0.001
 
@@ -76,6 +79,10 @@ if __name__ == "__main__":
         acc = correct / len(train_label)
         print("epoch:{:d}  train_loss:{:f}  train_acc:{:f}".format(epoch,loss,acc))
 
+
+        writer.add_scalar('train/train_acc', acc, epoch + 1)
+        writer.add_scalar('train/train_loss', loss, epoch + 1)
+
         # writer.add_scalar("train_loss", loss, epoch)
 
         model.eval() #开启预测模式 不启用 BatchNormalization 和 Dropout，保证BN和dropout不发生变化
@@ -95,5 +102,6 @@ if __name__ == "__main__":
 
             # if epoch >=10:
             #     writer.add_scalar("test_acc", acc, epoch-10)
-
-# writer.close()
+        writer.add_scalar('test/test_acc', acc, epoch + 1)
+        writer.add_scalar('test/test_loss', loss, epoch + 1)
+writer.close()

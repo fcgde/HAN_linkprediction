@@ -23,7 +23,10 @@ print('--------------------')
 #print("key",data.keys())
 #print('--------------------')
 #print("value",data.values())
-# print("features：",data['feature'])
+#print("features：",data['feature'])
+#print("label：",data['label'])
+#print("PLP：",data['PLP'])
+#print("PAP：",data['PAP'])
 # checkShape = torch.Tensor(data['feature'])
 # print('shapes:{:d},{:d}'.format(checkShape.shape[0],checkShape.shape[-1]))
 
@@ -113,11 +116,84 @@ print('--------------------')
 # aa = [[1,1,0,1]]
 # bb = (1-aa)
 # print(bb)
-aa = np.array(
-    [1,2,3,4,5,6,7]
-)
-bb = [3,1,5,8]
-cc = np.isin(aa,bb)
-print(cc)
-dd = (1-cc).astype(bool)
-print(dd)
+
+
+# aa = np.array(
+#     [1,2,3,4,5,6,7]
+# )
+# bb = [3,1,5,8]
+# cc = np.isin(aa,bb)
+# print(cc)
+# dd = (1-cc).astype(bool)
+# print(dd)
+
+#aa=nn.ModuleList(
+    #[nn.init.xavier_uniform_(nn.Parameter(torch.empty(2, 2)), 1.414). for i in range(2)]
+    #[nn.Linear(10, 10) for i in range(10)]
+    #[nn.Linear(10, 10) for i in range(10)]
+#)
+#aa.add_module("trans1",[nn.Parameter(torch.empty(12, 12))])
+#aa.add_module("trans2",[nn.Parameter(torch.empty(12, 12))])
+#print(aa)
+# print(aa[0])
+# print(aa[1])
+
+# a = torch.tensor([[1,2],[2,3]])
+# print(a.shape[0])
+
+# a = torch.tensor([
+#         [
+#             [1,2],
+#             [2,3],
+#             [3,4]
+#         ],
+#         [
+#             [1,2],
+#             [2,3],
+#             [3,4]
+#         ]
+# ])
+# print(a.shape)
+# print(torch.transpose(a,2,1))
+# b = torch.tensor(
+#     [
+#         [1],
+#         [0]
+#     ]
+# )
+# c = a.matmul(b)
+# print(a.shape)
+# print(b.shape)
+# print(c.shape)
+# d = c.reshape(c.shape[0], c.shape[1])
+# print(c)
+# print(d)
+
+# a = torch.zeros(5,1)
+# a[4,0] = 1
+# print(a)
+# b = torch.ones(5,5)
+# c = b.matmul(a)
+# print(c)
+
+#print(len(a))
+
+# a = torch.tensor([[1,2],
+#      [3,4]])
+# b = torch.tensor([
+#     [1,2],
+#     [3,4]
+# ])
+# c=torch.stack([a,b])
+# print(c)
+# print(c.shape)
+
+# a = torch.ones(5,5)
+# print(a)
+# for i in range(10):
+#     print(i)
+
+if 3<2 :
+    print("1")
+else:
+    print("2")
